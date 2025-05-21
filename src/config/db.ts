@@ -17,6 +17,8 @@ class Database {
             connectionTimeoutMillis: 5000
         };
 
+
+
         this.pool = new Pool(poolConfig);
 
         this.pool.on('connect', () => {
@@ -28,6 +30,8 @@ class Database {
             process.exit(-1);
         });
     }
+
+    
 
     async executeQuery(text: string, params: any[] = []): Promise<QueryResult> {
         const client = await this.pool.connect();

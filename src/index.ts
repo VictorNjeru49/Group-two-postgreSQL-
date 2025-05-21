@@ -1,4 +1,6 @@
-import {insertUser,getAllUsers,updateUser,deleteUser,insertProduct,getAllProducts,updateProduct,deleteProduct} from './example/wednesday';
+import {insertUser,getAllUsers,updateUser,deleteUser,insertProduct,
+        getAllProducts,updateProduct,deleteProduct, getUsersAndProducts, 
+        getUsersWithMostProducts, getExpensiveProducts} from './example/wednesday';
 
 async function main() {
     try {
@@ -23,6 +25,18 @@ async function main() {
         await updateProduct(productId!, { price: 17.99 });
 
         await deleteProduct(productId!);
+
+        // Set Operations
+        const usersAndProducts = await getUsersAndProducts();
+        console.log('Users and Products:', usersAndProducts);
+
+        // Subqueries
+        const usersWithMostProducts = await getUsersWithMostProducts();
+        console.log('Users with More than 5 Products:', usersWithMostProducts);
+
+        // Common Table Expressions (CTEs)
+        const expensiveProducts = await getExpensiveProducts();
+        console.log('Expensive Products:', expensiveProducts);
     } catch (error) {
         console.error('Error in main function:', error);
     }

@@ -1,9 +1,7 @@
 import db, { executeQuery } from "../config/db";
 import { TProduct, TUser } from "../types/alltypes";
 
-// User CRUD Operations
 
-// Insert a single user
 export const insertUser = async (user: TUser): Promise<number | undefined> => {
     try {
         const res = await executeQuery(
@@ -22,7 +20,7 @@ export const insertUser = async (user: TUser): Promise<number | undefined> => {
     }
 };
 
-// Insert multiple users
+
 export const insertMultipleUsers = async (users: TUser[]): Promise<void> => {
     const client = await db.getPool().connect();
     try {
@@ -46,7 +44,7 @@ export const insertMultipleUsers = async (users: TUser[]): Promise<void> => {
     }
 };
 
-// Read all users
+
 export const getAllUsers = async (): Promise<TUser[]> => {
     try {
         const res = await executeQuery('SELECT * FROM users');
@@ -58,7 +56,7 @@ export const getAllUsers = async (): Promise<TUser[]> => {
     }
 };
 
-// Read a user by ID
+
 export const getUserById = async (id: number): Promise<TUser | null> => {
     try {
         const res = await executeQuery('SELECT * FROM users WHERE id = $1', [id]);
@@ -69,7 +67,6 @@ export const getUserById = async (id: number): Promise<TUser | null> => {
     }
 };
 
-// Update a user by ID
 export const updateUser = async (id: number, user: Partial<TUser>): Promise<void> => {
     const updates = Object.keys(user).map((key, index) => `${key} = $${index + 1}`).join(', ');
     const values = Object.values(user);
@@ -83,7 +80,7 @@ export const updateUser = async (id: number, user: Partial<TUser>): Promise<void
     }
 };
 
-// Delete a user by ID
+
 export const deleteUser = async (id: number): Promise<void> => {
     try {
         const res = await executeQuery('DELETE FROM users WHERE id = $1', [id]);
@@ -94,7 +91,7 @@ export const deleteUser = async (id: number): Promise<void> => {
     }
 };
 
-// Delete all users
+
 export const deleteAllUsers = async (): Promise<void> => {
     try {
         const res = await executeQuery('DELETE FROM users');
@@ -105,9 +102,8 @@ export const deleteAllUsers = async (): Promise<void> => {
     }
 };
 
-// Product CRUD Operations
 
-// Insert a single product
+
 export const insertProduct = async (product: TProduct): Promise<number | undefined> => {
     try {
         const res = await executeQuery(
@@ -137,7 +133,7 @@ export const insertProduct = async (product: TProduct): Promise<number | undefin
     }
 };
 
-// Read all products
+
 export const getAllProducts = async (): Promise<TProduct[]> => {
     try {
         const res = await executeQuery('SELECT * FROM products');
@@ -149,7 +145,8 @@ export const getAllProducts = async (): Promise<TProduct[]> => {
     }
 };
 
-// Read a product by ID
+
+
 export const getProductById = async (id: number): Promise<TProduct | null> => {
     try {
         const res = await executeQuery('SELECT * FROM products WHERE id = $1', [id]);
@@ -160,7 +157,7 @@ export const getProductById = async (id: number): Promise<TProduct | null> => {
     }
 };
 
-// Update a product by ID
+
 export const updateProduct = async (id: number, product: Partial<TProduct>): Promise<void> => {
     const updates = Object.keys(product).map((key, index) => `${key} = $${index + 1}`).join(', ');
     const values = Object.values(product);
@@ -174,7 +171,7 @@ export const updateProduct = async (id: number, product: Partial<TProduct>): Pro
     }
 };
 
-// Delete a product by ID
+
 export const deleteProduct = async (id: number): Promise<void> => {
     try {
         const res = await executeQuery('DELETE FROM products WHERE id = $1', [id]);
@@ -185,7 +182,7 @@ export const deleteProduct = async (id: number): Promise<void> => {
     }
 };
 
-// Delete all products
+
 export const deleteAllProducts = async (): Promise<void> => {
     try {
         const res = await executeQuery('DELETE FROM products');
@@ -195,3 +192,60 @@ export const deleteAllProducts = async (): Promise<void> => {
         throw err;
     }
 };
+
+
+// SET OPERATOR
+export const getUsersAndProducts = async (): Promise<(TUser | TProduct)[]> => {
+    try {
+        const res = await executeQuery(`
+            SELECT fullname AS name, email AS identifier FROM users
+            UNION ALL
+            SELECT product_name AS name, sku AS identifier FROM products
+        `);
+        console.log(`Retrieved ${res.rows.length} users and products`);
+        return res.rows;
+    } catch (err) {
+        console.error('Error querying users and products:', err);
+        throw err;
+    }
+};
+
+// SUBQUERIES
+export const getUsersWithMostProducts = async (): Promise<TUser[]> => {
+    try {
+        const res = await executeQuery(`
+            SELECT u.* FROM users u
+            WHERE (
+                SELECT COUNT(*) FROM products p
+                WHERE p.user_id = u.id
+            ) > 5
+        `);
+        console.log(`Retrieved ${res.rows.length} users with more than 5 products`);
+        return res.rows as TUser[];
+    } catch (err) {
+        console.error('Error querying users with most products:', err);
+        throw err;
+    }
+};
+
+
+// COMMON TABLE EXPRESSION
+export const getExpensiveProducts = async (): Promise<TProduct[]> => {
+    try {
+        const res = await executeQuery(`
+            WITH AvgPrice AS (
+                SELECT AVG(price) AS average_price FROM products
+            )
+            SELECT * FROM products
+            WHERE price > (SELECT average_price FROM AvgPrice)
+        `);
+        console.log(`Retrieved ${res.rows.length} expensive products`);
+        return res.rows as TProduct[];
+    } catch (err) {
+        console.error('Error querying expensive products:', err);
+        throw err;
+    }
+};
+
+
+
