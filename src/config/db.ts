@@ -58,9 +58,43 @@ class Database {
 
             console.log('Database schema initialized successfully');
         } catch (error) {
-            console.log(`Error initializing Database: ${error}`);
+            console.error(`Error initializing Database: ${error}`);
             throw error;
         }
+    }
+
+    
+    async create<T extends object>(tableName: string, entity: T): Promise<number> {
+        const keys = Object.keys(entity).join(', ');
+        const values = Object.values(entity).map((_, index) => `$${index + 1}`).join(', ');
+
+        const query = `INSERT INTO ${tableName} (${keys}) VALUES (${values}) RETURNING id`;
+        const result = await this.executeQuery(query, Object.values(entity));
+        return result.rows[0].id;
+    }
+
+
+    async readAll<T>(tableName: string): Promise<T[]> {
+        const result = await this.executeQuery(`SELECT * FROM ${tableName}`);
+        return result.rows as T[];
+    }
+
+
+    async readById<T>(tableName: string, id: number): Promise<T | null> {
+        const result = await this.executeQuery(`SELECT * FROM ${tableName} WHERE id = $1`, [id]);
+        return result.rows[0] || null;
+    }
+
+
+    async update<T>(tableName: string, id: number, entity: Partial<T>): Promise<void> {
+        const updates = Object.keys(entity).map((key, index) => `${key} = $${index + 1}`).join(', ');
+        const query = `UPDATE ${tableName} SET ${updates} WHERE id = $${Object.keys(entity).length + 1}`;
+        await this.executeQuery(query, [...Object.values(entity), id]);
+    }
+
+
+    async delete(tableName: string, id: number): Promise<void> {
+        await this.executeQuery(`DELETE FROM ${tableName} WHERE id = $1`, [id]);
     }
 
     getPool(): Pool {
@@ -68,8 +102,16 @@ class Database {
     }
 }
 
+
 const db = new Database();
 
+
 export const executeQuery = (text: string, params: any[] = []) => db.executeQuery(text, params);
-export const initializeTable = () => db.initializeTables();
+export const initializeTables = () => db.initializeTables();
+export const createEntity = <T extends object>(tableName: string, entity: T) => db.create(tableName, entity);
+export const readAllEntities = <T>(tableName: string) => db.readAll<T>(tableName);
+export const readEntityById = <T>(tableName: string, id: number) => db.readById<T>(tableName, id);
+export const updateEntity = <T>(tableName: string, id: number, entity: Partial<T>) => db.update(tableName, id, entity);
+export const deleteEntity = (tableName: string, id: number) => db.delete(tableName, id);
+
 export default db;

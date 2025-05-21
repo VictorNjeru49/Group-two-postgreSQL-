@@ -4,7 +4,7 @@ export const usersTable = `
         id SERIAL PRIMARY KEY,
         fullname VARCHAR(100) NOT NULL,
         email VARCHAR(100) NOT NULL UNIQUE,
-        phone INTEGER NOT NULL,
+        phone INT NOT NULL,
         address TEXT NOT NULL,
         created_at TIMESTAMPTZ DEFAULT NOW(),
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -13,7 +13,7 @@ export const usersTable = `
 
 export const productsTable = `
     CREATE TABLE IF NOT EXISTS products (
-        product_id SERIAL PRIMARY KEY,
+        id SERIAL PRIMARY KEY,
         product_name VARCHAR(100) NOT NULL,
         description TEXT,
         price DECIMAL(10, 2) NOT NULL,
