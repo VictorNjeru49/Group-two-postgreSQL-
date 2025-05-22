@@ -223,7 +223,7 @@ export const getusersWithMostProducts = async (): Promise<TUser[]> => {
             SELECT u.* FROM users u
             WHERE (
                 SELECT COUNT(*) FROM products p
-                WHERE p.user_id = u.id
+                WHERE p.id = u.id
             ) > 5
         `);
         console.log(`Retrieved ${res.rows.length} users with more than 5 products`);
