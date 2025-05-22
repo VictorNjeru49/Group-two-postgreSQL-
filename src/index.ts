@@ -1,7 +1,5 @@
 import {insertUser,updateUser,deleteUser,insertProduct, getAllProducts,updateProduct,deleteProduct, getExpensiveProducts, getAllusers, getusersAndProducts, getusersWithMostProducts} from './example/wednesday';
-import db, { executeQuery } from './config/db';
-import { productsTable, usersTable } from './config/schema';
-import { promises } from 'dns';
+import db from './config/db';
 
 async function main() {
     try {
