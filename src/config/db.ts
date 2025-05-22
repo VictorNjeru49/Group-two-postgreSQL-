@@ -17,8 +17,6 @@ class Database {
             connectionTimeoutMillis: 5000
         };
 
-
-
         this.pool = new Pool(poolConfig);
 
         this.pool.on('connect', () => {
@@ -31,8 +29,6 @@ class Database {
         });
     }
 
-    
-
     async executeQuery(text: string, params: any[] = []): Promise<QueryResult> {
         const client = await this.pool.connect();
 
@@ -44,9 +40,9 @@ class Database {
             console.log(`Executed query: ${text} - Duration: ${duration} ms`);
 
             return result;
-        } catch (error) {
-            console.error(`Database query error: ${error}`);
-            throw error;
+        } catch (error: any) {
+            console.error(`Database query error: ${error.message}`);
+            throw new Error(`Database query failed: ${error.message}`);
         } finally {
             client.release();
         }
@@ -60,10 +56,11 @@ class Database {
             await this.executeQuery(productsTable);
             console.log('Products Table initialized or already exists');
 
+
             console.log('Database schema initialized successfully');
-        } catch (error) {
-            console.error(`Error initializing Database: ${error}`);
-            throw error;
+        } catch (error: any) {
+            console.error(`Error initializing Database: ${error.message}`);
+            throw error
         }
     }
 

@@ -1,42 +1,47 @@
-import {insertUser,getAllUsers,updateUser,deleteUser,insertProduct,
-        getAllProducts,updateProduct,deleteProduct, getUsersAndProducts, 
-        getUsersWithMostProducts, getExpensiveProducts} from './example/wednesday';
+import {insertUser,updateUser,deleteUser,insertProduct, getAllProducts,updateProduct,deleteProduct, getExpensiveProducts, getAllusers, getusersAndProducts, getusersWithMostProducts} from './example/wednesday';
+import db, { executeQuery } from './config/db';
+import { productsTable, usersTable } from './config/schema';
+import { promises } from 'dns';
 
 async function main() {
     try {
+        
+        await db.initializeTables()
+
         // User Operations
-        const userId = await insertUser({ fullname: 'John Doe', email: 'john@example.com', phone: 1234567890, address: '123 Main St' });
-        console.log(`Inserted User ID: ${userId}`);
 
-        const users = await getAllUsers();
-        console.log(users);
+        // const userId = await insertUser({ fullname: 'John Doe', email: 'john1@example.com', phone: 1234567890, address: '123 Main St' });
+        // console.log(`Inserted User ID: ${userId}`);
 
-        await updateUser(userId!, { phone: 3987654321 });
+        const users = await getAllusers();
+        console.table(users);
 
-        await deleteUser(userId!);
+        // await updateUser(userId!, { phone: 3987654321 });
+
+        // await deleteUser(userId!);
 
         // Product Operations
-        const productId = await insertProduct({ product_name: 'Sample Product', description: 'This is a sample product', price: 19.99, stock_quantity: 100, category_id: 1, brand_id: 1, sku: 'SKU123', image_url: 'http://example.com/image.jpg', is_active: true });
-        console.log(`Inserted Product ID: ${productId}`);
+        // const productId = await insertProduct({ product_name: 'Sample Product', description: 'This is a sample product', price: 19.99, stock_quantity: 100, category_id: 1, brand_id: 1, sku: 'SKU123', image_url: 'http://example.com/image.jpg', is_active: true });
+        // console.log(`Inserted Product ID: ${productId}`);
 
         const products = await getAllProducts();
-        console.log(products);
+        console.table(products);
 
-        await updateProduct(productId!, { price: 17.99 });
+        // await updateProduct(productId!, { price: 17.99 });
 
-        await deleteProduct(productId!);
+        // await deleteProduct(productId!);
 
         // Set Operations
-        const usersAndProducts = await getUsersAndProducts();
-        console.log('Users and Products:', usersAndProducts);
+        // const usersAndProducts = await getusersAndProducts();
+        // console.log('Users and Products:', usersAndProducts);
 
         // Subqueries
-        const usersWithMostProducts = await getUsersWithMostProducts();
-        console.log('Users with More than 5 Products:', usersWithMostProducts);
+        // const usersWithMostProducts = await getusersWithMostProducts();
+        // console.log('Users with More than 5 Products:', usersWithMostProducts);
 
         // Common Table Expressions (CTEs)
-        const expensiveProducts = await getExpensiveProducts();
-        console.log('Expensive Products:', expensiveProducts);
+        // const expensiveProducts = await getExpensiveProducts();
+        // console.log('Expensive Products:', expensiveProducts);
     } catch (error) {
         console.error('Error in main function:', error);
     }
