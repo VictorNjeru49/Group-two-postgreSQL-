@@ -40,9 +40,9 @@ class Database {
             console.log(`Executed query: ${text} - Duration: ${duration} ms`);
 
             return result;
-        } catch (error) {
-            console.error(`Database query error: ${error}`);
-            throw error;
+        } catch (error: any) {
+            console.error(`Database query error: ${error.message}`);
+            throw new Error(`Database query failed: ${error.message}`);
         } finally {
             client.release();
         }
@@ -77,9 +77,9 @@ class Database {
             await db.executeQuery(`ALTER TABLE users ALTER COLUMN phone TYPE BIGINT`);
 
             console.log('Database schema initialized successfully');
-        } catch (error) {
-            console.error(`Error initializing Database: ${error}`);
-            throw error;
+        } catch (error: any) {
+            console.error(`Error initializing Database: ${error.message}`);
+            throw error
         }
     }
 
