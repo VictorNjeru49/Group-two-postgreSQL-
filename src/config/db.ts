@@ -1,6 +1,6 @@
 import env from './env';
 import { Pool, PoolConfig, QueryResult } from 'pg';
-import { usersTable, productsTable } from './schema'; 
+import { usersTable, productsTable, categoriesTable ,brandsTable , ordersTable, orderItemsTable, cartItemsTable, paymentsTable} from './schema'; 
 
 class Database {
     private pool: Pool;
@@ -55,6 +55,26 @@ class Database {
 
             await this.executeQuery(productsTable);
             console.log('Products Table initialized or already exists');
+
+            await this.executeQuery(categoriesTable);
+            console.log('Products Table initialized or already exists');
+
+            await this.executeQuery(brandsTable);
+            console.log('Products Table initialized or already exists');
+
+            await this.executeQuery(ordersTable);
+            console.log('Products Table initialized or already exists');
+
+            await this.executeQuery(orderItemsTable);
+            console.log('Products Table initialized or already exists');
+
+            await this.executeQuery(cartItemsTable);
+            console.log('Products Table initialized or already exists');
+
+            await this.executeQuery(paymentsTable);
+            console.log('Products Table initialized or already exists');
+
+            await db.executeQuery(`ALTER TABLE users ALTER COLUMN phone TYPE BIGINT`);
 
             console.log('Database schema initialized successfully');
         } catch (error) {
