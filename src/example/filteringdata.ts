@@ -1,7 +1,7 @@
 // Database schema-based filtering implementation
 import { Pool } from 'pg';
 
-// Type definitions based on your schema
+// Type definitions 
 interface User {
   id: number;
   fullname: string;
@@ -47,7 +47,7 @@ interface UserFilterOptions extends BaseFilterOptions {
   fullnameContains?: string;
   email?: string;
   emailContains?: string;
-  emailDomain?: string; // e.g., "gmail.com"
+  emailDomain?: string; 
   phone?: number;
   phoneStartsWith?: string;
   addressContains?: string;
@@ -607,7 +607,7 @@ async function exampleUsage() {
   }
 }
 
-// Export classes and interfaces
+
 export { 
   UserFilter, 
   ProductFilter, 

@@ -8,7 +8,7 @@ async function main() {
 
         // User Operations
 
-        const userId = await insertUser({ fullname: 'John Doe', email: 'john1@example.com', phone: 1234567890, address: '123 Main St' });
+        const userId = await insertUser({ fullname: 'John Doe', email: 'john12@example.com', phone: 1234567890, address: '123 Main St' });
         console.log(`Inserted User ID: ${userId}`);
 
         const users = await getAllusers();
