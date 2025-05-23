@@ -14,7 +14,7 @@ export default{
         host: process.env.PGHOST || 'localhost',
         port: parseInt(process.env.PGPORT || '5432', 10),
         user: process.env.PGUSER || 'postgres',
-        password: process.env.PGPASSWORD || '',
+        password: process.env.PGPASSWORD || 'Akwinara2005!',
         database: process.env.PGDATABASE || 'socialmedia',
     }
 };
