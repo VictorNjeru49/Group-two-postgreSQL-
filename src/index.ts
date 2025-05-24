@@ -11,16 +11,22 @@ import {
   getusersAndProducts,
   getusersWithMostProducts,
 } from "./example/wednesday";
- import {
+
+import {
   getOrdersWithUsers,
   getUsersWithOrders,
   getOrdersWithUsersRightJoin,
   getUsersAndOrdersFullJoin,
   getOrdersWithItems,
   getUserOrderProductDetails,
-} from './example/joinQueries';
+} from "./example/joinQueries";
 
-
+import {
+  getOrderDetails,
+  getSalesByCategory,
+  getSalesRollup,
+  getSalesCube,
+} from "./example/tuesday";
 
 import db from "./config/db";
 
@@ -29,7 +35,6 @@ async function main() {
     await db.initializeTables();
 
     // User Operations
-
     const userId = await insertUser({
       fullname: "John Doe",
       email: "john1@example.com",
@@ -42,7 +47,6 @@ async function main() {
     console.table(users);
 
     await updateUser(1, { phone: 39654321 });
-
     await deleteUser(14);
 
     // Product Operations
@@ -63,7 +67,6 @@ async function main() {
     console.table(products);
 
     await updateProduct(productId!, { price: 17.99 });
-
     await deleteProduct(productId!);
 
     // Set Operations
@@ -78,37 +81,45 @@ async function main() {
     const expensiveProducts = await getExpensiveProducts();
     console.log("Expensive Products:", expensiveProducts);
 
-    // Perform INNER JOIN between orders and users
+    // JOIN Operations
     const ordersWithUsers = await getOrdersWithUsers();
     console.log("INNER JOIN - Orders with Users:");
     console.table(ordersWithUsers);
 
-    // Perform LEFT JOIN between users and orders
     const usersWithOrders = await getUsersWithOrders();
     console.log("LEFT JOIN - Users with Orders:");
     console.table(usersWithOrders);
 
-    // Perform RIGHT JOIN between users and orders
     const ordersWithUsersRight = await getOrdersWithUsersRightJoin();
     console.log("RIGHT JOIN - Orders with Users:");
     console.table(ordersWithUsersRight);
 
-    // Perform FULL OUTER JOIN between users and orders
     const usersAndOrdersFull = await getUsersAndOrdersFullJoin();
     console.log("FULL OUTER JOIN - Users and Orders:");
     console.table(usersAndOrdersFull);
 
-    // Perform multiple INNER JOINs between orders, order_items, and products
     const ordersWithItems = await getOrdersWithItems();
     console.log("INNER JOIN - Orders with Items:");
     console.table(ordersWithItems);
 
-    // Perform multiple INNER JOINs across users, orders, order_items, and products
     const userOrderProductDetails = await getUserOrderProductDetails();
     console.log("INNER JOIN - User Order Product Details:");
     console.table(userOrderProductDetails);
 
-    console.log("All join operations completed successfully.");
+    // Analytics (GROUP BY, ROLLUP, CUBE)
+    const orderDetails = await getOrderDetails();
+    console.log("Order Details:", orderDetails);
+
+    const salesByCategory = await getSalesByCategory();
+    console.log("Sales by Category:", salesByCategory);
+
+    const salesRollup = await getSalesRollup();
+    console.log("Sales Rollup:", salesRollup);
+
+    const salesCube = await getSalesCube();
+    console.log("Sales Cube:", salesCube);
+
+    console.log("All operations completed successfully.");
   } catch (error) {
     console.error("Error in main function:", error);
   }

@@ -11,7 +11,7 @@ if(result.error){
 
 export default{
     database: {
-        host: process.env.PGHOST || 'localhost',
+        host: process.env.PGHOST,
         port: parseInt(process.env.PGPORT || '5432', 10),
         user: process.env.PGUSER || 'postgres',
         password: process.env.PGPASSWORD || '',

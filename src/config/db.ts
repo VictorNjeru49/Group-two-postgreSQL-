@@ -1,11 +1,7 @@
-import env from "./env";
-import { Pool, PoolConfig, QueryResult } from "pg";
-import {
-  usersTable,
-  productsTable,
-  orderTable,
-  orderItemsTable,
-} from "./schema";
+
+import env from './env';
+import { Pool, PoolConfig, QueryResult } from 'pg';
+import { usersTable, productsTable, categoriesTable ,brandsTable , ordersTable, orderItemsTable, cartItemsTable, paymentsTable} from './schema'; 
 
 class Database {
   private pool: Pool;
@@ -53,18 +49,42 @@ class Database {
     }
   }
 
-  async initializeTables(): Promise<void> {
-    try {
-      await this.executeQuery(usersTable);
-      console.log("Users Table initialized or already exists");
 
-      await this.executeQuery(productsTable);
-      console.log("Products Table initialized or already exists");
 
-      console.log("Database schema initialized successfully");
+    async initializeTables(): Promise<void> {
+        try {
+            await this.executeQuery(usersTable);
+            console.log('Users Table initialized or already exists');
 
-      await this.executeQuery(orderTable);
-      console.log("Orders table created or already exists");
+            await this.executeQuery(productsTable);
+            console.log('Products Table initialized or already exists');
+
+            await this.executeQuery(categoriesTable);
+            console.log('Products Table initialized or already exists');
+
+            await this.executeQuery(brandsTable);
+            console.log('Products Table initialized or already exists');
+
+            await this.executeQuery(ordersTable);
+            console.log('Products Table initialized or already exists');
+
+            await this.executeQuery(orderItemsTable);
+            console.log('Products Table initialized or already exists');
+
+            await this.executeQuery(cartItemsTable);
+            console.log('Products Table initialized or already exists');
+
+            await this.executeQuery(paymentsTable);
+            console.log('Products Table initialized or already exists');
+
+            await db.executeQuery(`ALTER TABLE users ALTER COLUMN phone TYPE BIGINT`);
+
+            console.log('Database schema initialized successfully');
+        } catch (error: any) {
+            console.error(`Error initializing Database: ${error.message}`);
+            throw error
+        }
+    }
 
       await this.executeQuery(orderItemsTable);
       console.log("Order_items table created or already exists");
