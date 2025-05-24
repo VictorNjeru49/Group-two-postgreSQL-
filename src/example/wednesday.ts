@@ -234,8 +234,6 @@ export const getusersWithMostProducts = async (): Promise<TUser[]> => {
     }
 };
 
-
-// COMMON TABLE EXPRESSION
 export const getExpensiveProducts = async (): Promise<TProduct[]> => {
     try {
         const res = await db.executeQuery(`
