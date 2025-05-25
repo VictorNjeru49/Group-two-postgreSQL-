@@ -81,6 +81,10 @@ async function main() {
     const expensiveProducts = await getExpensiveProducts();
     console.log("Expensive Products:", expensiveProducts);
 
+
+        const userId = await insertUser({ fullname: 'John Doe', email: 'john12@example.com', phone: 1234567890, address: '123 Main St' });
+        console.log(`Inserted User ID: ${userId}`);
+
     // JOIN Operations
     const ordersWithUsers = await getOrdersWithUsers();
     console.log("INNER JOIN - Orders with Users:");
